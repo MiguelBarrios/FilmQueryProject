@@ -181,5 +181,9 @@ public class Film {
 	public int hashCode() {
 		return Objects.hash(id);
 	}
+	
+	public void basicDisplay() {
+		System.out.printf("%s(%s) %s\n%s\n\n", title, rating,releaseYear , description);
+	}
 
 }
