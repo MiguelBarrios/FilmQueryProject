@@ -14,21 +14,24 @@ public class FilmQueryApp {
 
 	public static void main(String[] args) {
 		FilmQueryApp app = new FilmQueryApp();
-		// app.test();
-		app.launch();
+		 app.test();
+		//app.launch();
 	}
 
 	private void test() {
-		Film film = db.findFilmById(1);
-		System.out.println(film);
-		System.out.println();
-
-		Actor actor = db.findActorById(2);
-		System.out.println(actor);
-		System.out.println();
-
-		List<Actor> actors = db.findActorsByFilmId(3);
-		System.out.println(actors);
+//		Film film = db.findFilmById(1);
+//		System.out.println(film);
+//		System.out.println();
+//
+//		Actor actor = db.findActorById(2);
+//		System.out.println(actor);
+//		System.out.println();
+//
+//		List<Actor> actors = db.findActorsByFilmId(3);
+//		System.out.println(actors);
+		
+		List<Film> films = db.findFilmsByKeyWord("gun");
+		System.out.println(films);
 	}
 
 	private void launch() {
