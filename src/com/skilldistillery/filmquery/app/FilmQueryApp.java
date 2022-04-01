@@ -15,7 +15,7 @@ public class FilmQueryApp {
 	public static void main(String[] args) {
 		FilmQueryApp app = new FilmQueryApp();
 		 app.test();
-		//app.launch();
+		app.launch();
 	}
 
 	private void test() {
@@ -30,8 +30,8 @@ public class FilmQueryApp {
 //		List<Actor> actors = db.findActorsByFilmId(3);
 //		System.out.println(actors);
 		
-		List<Film> films = db.findFilmsByKeyWord("gun");
-		System.out.println(films);
+//		List<Film> films = db.findFilmsByKeyWord("gun");
+//		System.out.println(films);
 	}
 
 	private void launch() {
@@ -92,6 +92,14 @@ public class FilmQueryApp {
 	}
 
 	private void searchForFilmByKeyword(Scanner input) {
+		System.out.println("\n Search for Film By Keyword");
+		System.out.print("Enter keyword: ");
+		String keyword = input.nextLine();
+		List<Film> films = db.findFilmsByKeyWord(keyword);
+		System.out.println("Results");
+		for(Film film : films) {
+			film.basicDisplay();
+		}
 
 	}
 
