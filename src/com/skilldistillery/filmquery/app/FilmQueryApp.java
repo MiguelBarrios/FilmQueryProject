@@ -14,12 +14,12 @@ public class FilmQueryApp {
 
   public static void main(String[] args) {
     FilmQueryApp app = new FilmQueryApp();
-    app.test();
+    //app.test();
     app.launch();
   }
 
   private void test() {
-    Film film = db.findFilmById(1000);
+    Film film = db.findFilmById(1);
     System.out.println(film);
     System.out.println();
     
@@ -41,10 +41,42 @@ public class FilmQueryApp {
   }
 
   private void startUserInterface(Scanner input) {
-    
+    String userInput = "";
+    Scanner scanner = new Scanner(System.in);
+    do {
+    	displayMainMenu();
+    	userInput = scanner.nextLine();
+    	if(userInput.equals("1")) {
+    		searchForFilmbyId();
+    	}
+    	else if(userInput.equals("2")) {
+    		searchForFilmByKeyword();
+    	}
+    	else if(userInput.equals("3")) {
+    		System.out.println("Goodbye");
+    		return;
+    	}
+    	else {
+    		System.out.println("Invalid input");
+    	}
+    	
+    }while(!userInput.equals("3"));
   }
   
   private void displayMainMenu() {
+	  System.out.println("Main Menu");
+	  System.out.println("1) Look up film by film id");
+	  System.out.println("2) Search for films by keyword");
+	  System.out.println("3) Exit");
+	  System.out.print("Selection: ");
+	  
+  }
+  
+  private void searchForFilmbyId() {
+	  
+  }
+  
+  private void searchForFilmByKeyword() {
 	  
   }
 
