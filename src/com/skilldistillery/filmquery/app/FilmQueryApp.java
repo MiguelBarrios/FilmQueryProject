@@ -14,7 +14,7 @@ public class FilmQueryApp {
 
 	public static void main(String[] args) {
 		FilmQueryApp app = new FilmQueryApp();
-		 app.test();
+		app.test();
 		app.launch();
 	}
 
@@ -29,7 +29,7 @@ public class FilmQueryApp {
 //
 //		List<Actor> actors = db.findActorsByFilmId(3);
 //		System.out.println(actors);
-		
+
 //		List<Film> films = db.findFilmsByKeyWord("gun");
 //		System.out.println(films);
 	}
@@ -71,6 +71,7 @@ public class FilmQueryApp {
 	}
 
 	private void searchForFilmbyId(Scanner input) {
+
 		System.out.println("\n## Lookup Film by Id ##");
 		System.out.print("Enter film id: ");
 
@@ -81,14 +82,23 @@ public class FilmQueryApp {
 			System.out.println("Invalid input");
 			return;
 		}
-		
+
 		Film film = db.findFilmById(id);
-		
-		if(film == null) {
+
+		if (film == null) {
 			System.out.println("Film with id: " + id + " not found\n");
-		}else {
-			film.basicDisplay();
+			return;
 		}
+
+		film.basicDisplay();
+		System.out.println("1) View film details");
+		System.out.println("2) Return to main menu");
+		System.out.print("Selection: ");
+		String userInput = input.nextLine();
+		if(userInput.equals("1")) {
+			System.out.println(film);
+		}
+
 	}
 
 	private void searchForFilmByKeyword(Scanner input) {
@@ -96,12 +106,12 @@ public class FilmQueryApp {
 		System.out.print("Enter keyword: ");
 		String keyword = input.nextLine();
 		List<Film> films = db.findFilmsByKeyWord(keyword);
-		if(films == null) {
+		if (films == null) {
 			System.out.println("No films with keyword \"" + keyword + "\" found");
 			return;
 		}
 		System.out.println("Films containing: " + keyword);
-		for(Film film : films) {
+		for (Film film : films) {
 			film.basicDisplay();
 		}
 
