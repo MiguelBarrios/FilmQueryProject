@@ -100,7 +100,7 @@ public class FilmQueryApp {
 			System.out.println("No films with keyword \"" + keyword + "\" found");
 			return;
 		}
-		System.out.println("Results");
+		System.out.println("Films containing: " + keyword);
 		for(Film film : films) {
 			film.basicDisplay();
 		}
