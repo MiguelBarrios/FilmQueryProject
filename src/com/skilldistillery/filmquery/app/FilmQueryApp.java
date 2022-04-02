@@ -96,6 +96,10 @@ public class FilmQueryApp {
 		System.out.print("Enter keyword: ");
 		String keyword = input.nextLine();
 		List<Film> films = db.findFilmsByKeyWord(keyword);
+		if(films == null) {
+			System.out.println("No films with keyword \"" + keyword + "\" found");
+			return;
+		}
 		System.out.println("Results");
 		for(Film film : films) {
 			film.basicDisplay();

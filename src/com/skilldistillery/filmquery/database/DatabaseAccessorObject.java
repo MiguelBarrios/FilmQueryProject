@@ -40,7 +40,10 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 
 	@Override
 	public Film findFilmById(int filmId) {
-		String query = "SELECT * FROM film WHERE id = ?";
+		//String query = "SELECT * FROM film WHERE id = ?";
+		String query = "SELECT * FROM film\n"
+				+ "JOIN language on film.language_id = language.id\n"
+				+ "WHERE film.id = ?";
 		try (Connection conn = DriverManager.getConnection(URL, user, pass)) {
 			PreparedStatement stmt = prepareStatement(conn, query, filmId);
 			ResultSet rs = stmt.executeQuery();
@@ -60,6 +63,7 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 			film.setLength(rs.getInt("length"));
 			film.setReplacementCost(rs.getDouble("replacement_cost"));
 			film.setRating(rs.getString("rating"));
+			film.setLanguage(rs.getString("name"));
 
 			String[] featuresArr = rs.getString("special_features").split(",");
 			Set<String> featuresSet = new HashSet<>(Arrays.asList(featuresArr));
@@ -140,6 +144,7 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 	@Override
 	public List<Film> findFilmsByKeyWord(String searchKeyWord){
 		String query = "SELECT * from film\n"
+				+ "JOIN language on film.language_id = language.id\n"
 				+ "WHERE title like ? OR\n"
 				+ "description like ?";
 		
@@ -165,6 +170,7 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 				film.setLength(rs.getInt("length"));
 				film.setReplacementCost(rs.getDouble("replacement_cost"));
 				film.setRating(rs.getString("rating"));
+				film.setLanguage(rs.getString("name"));
 
 				String[] featuresArr = rs.getString("special_features").split(",");
 				Set<String> featuresSet = new HashSet<>(Arrays.asList(featuresArr));

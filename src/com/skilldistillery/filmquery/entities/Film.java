@@ -28,6 +28,8 @@ public class Film {
 	private Set<String> specialFeatures;
 	
 	private List<Actor> cast = null;
+	
+	private String language;
 
 	@Override
 	public boolean equals(Object obj) {
@@ -46,7 +48,7 @@ public class Film {
 	}
 
 	public Film(int id, String title, String description, int releaseYear, int languageId, int rentalDuration,
-			double rental_rate, int length, double replacementCost, String rating, Set<String> specialFeatures) {
+			double rental_rate, int length, double replacementCost, String rating, Set<String> specialFeatures, String language) {
 		super();
 		this.id = id;
 		this.title = title;
@@ -59,6 +61,7 @@ public class Film {
 		this.replacementCost = replacementCost;
 		this.rating = rating;
 		this.specialFeatures = specialFeatures;
+		this.language = language;
 	}
 
 	public int getId() {
@@ -177,13 +180,21 @@ public class Film {
 		this.length = length;
 	}
 
+	public String getLanguage() {
+		return language;
+	}
+
+	public void setLanguage(String language) {
+		this.language = language;
+	}
+
 	@Override
 	public int hashCode() {
 		return Objects.hash(id);
 	}
 	
 	public void basicDisplay() {
-		System.out.printf("%s(%s) %s\n%s\n\n", title, rating,releaseYear , description);
+		System.out.printf("%s(%s) %s Language %s: %s\n", title, rating,releaseYear ,language, description);
 	}
 
 }
