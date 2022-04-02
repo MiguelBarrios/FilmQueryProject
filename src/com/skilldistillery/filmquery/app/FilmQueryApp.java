@@ -23,7 +23,7 @@ public class FilmQueryApp {
 //		System.out.println(film);
 //		System.out.println();
 //
-//		Actor actor = db.findActorById(2);
+//		Actor actor = db.findActorById(34);
 //		System.out.println(actor);
 //		System.out.println();
 //

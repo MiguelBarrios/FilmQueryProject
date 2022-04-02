@@ -195,6 +195,7 @@ public class Film {
 	
 	public void basicDisplay() {
 		System.out.printf("%s(%s) %s Language %s: %s\n", title, rating,releaseYear ,language, description);
+		System.out.printf("Cast: %s\n\n", cast);
 	}
 
 }
