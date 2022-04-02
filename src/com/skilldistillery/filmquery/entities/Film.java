@@ -9,27 +9,30 @@ public class Film {
 
 	private String title;
 
-	private String description;
+	private String rating;
 
 	private Integer releaseYear;
-
+	
 	private int languageId;
+	
+	private String language;
+
+	private String category;
+
+	private String description;
+
+	private Integer length;
+
+	private List<Actor> cast = null;
+
+	private Set<String> specialFeatures;
 
 	private int rentalDuration;
 
 	private double rental_rate;
 
-	private Integer length;
-
 	private double replacementCost;
-
-	private String rating;
-
-	private Set<String> specialFeatures;
 	
-	private List<Actor> cast = null;
-	
-	private String language;
 
 	@Override
 	public boolean equals(Object obj) {
@@ -152,18 +155,6 @@ public class Film {
 		this.specialFeatures = specialFeatures;
 	}
 	
-	@Override
-	public String toString() {
-		String header = String.format("%s\n", title);
-		String filmInfo = String.format("\nRated: %s, Runtime %d minutes, releaseYear: %d, bonusFeatures: %s\n"
-				,rating, length, releaseYear, specialFeatures);
-		String cast = "Cast: " + this.cast + "\n";
-		String rentalInfo = String.format("RentalInfo: id %d, languageId %d, rental Rate: %.2f, replacment cost: %.2f, rental duration: %d"
-				, id, languageId, rental_rate, replacementCost, rentalDuration); 
-		return header + description + filmInfo + cast + rentalInfo;
-//		 rental_rate,replacementCost, rentalDuration );
-	}
-	
 	public List<Actor> getCast() {
 		return cast;
 	}
@@ -188,14 +179,36 @@ public class Film {
 		this.language = language;
 	}
 
+	public String getCategory() {
+		return category;
+	}
+
+	public void setCategory(String category) {
+		this.category = category;
+	}
+
 	@Override
 	public int hashCode() {
 		return Objects.hash(id);
 	}
 	
 	public void basicDisplay() {
-		System.out.printf("%s(%s) %s Language %s: %s\n", title, rating,releaseYear ,language, description);
+		System.out.printf("%s(%s) %s\n", title, rating,releaseYear);
+		System.out.printf("Language: %s\n", language);
+		System.out.println("Description: " + description);
 		System.out.printf("Cast: %s\n\n", cast);
 	}
+
+	@Override
+	public String toString() {
+		return "Film [id=" + id + ", title=" + title + ", rating=" + rating + ", releaseYear=" + releaseYear
+				+ ", languageId=" + languageId + ", language=" + language + ", category=" + category + ", description="
+				+ description + ", length=" + length + ", cast=" + cast + ", specialFeatures=" + specialFeatures
+				+ ", rentalDuration=" + rentalDuration + ", rental_rate=" + rental_rate + ", replacementCost="
+				+ replacementCost + "]";
+	}
+
+
+	
 
 }
