@@ -96,7 +96,7 @@ public class FilmQueryApp {
 		System.out.print("Selection: ");
 		String userInput = input.nextLine();
 		if(userInput.equals("1")) {
-			System.out.println(film);
+			film.detailedView();
 		}
 
 	}

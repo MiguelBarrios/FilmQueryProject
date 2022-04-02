@@ -198,6 +198,21 @@ public class Film {
 		System.out.println("Description: " + description);
 		System.out.printf("Cast: %s\n\n", cast);
 	}
+	
+	public void detailedView() {
+		System.out.println("\nDetailed View");
+		String res = title  + "(" + rating + ")" + "id=" + id + " releaseYear=" + releaseYear
+				+ ", languageId=" + languageId + ", language=" + language + ", category=" + category 
+				+ "\ndescription=" + description 
+				+ "\ncast: " + cast
+				+ "\nlength=" + length + ", specialFeatures=" + specialFeatures
+				+ "\nRental Details"
+				+ "\nrentalDuration=" + rentalDuration + ", rental_rate=" + rental_rate + ", replacementCost="
+				+ replacementCost + "\n";
+		
+		
+		System.out.println(res);
+	}
 
 	@Override
 	public String toString() {

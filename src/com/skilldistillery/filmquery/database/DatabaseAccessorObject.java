@@ -38,7 +38,7 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 		return stmt;
 	}
 	
-	public Film extractFilm(ResultSet rs) throws SQLException {
+	public Film extractFilm(ResultSet rs, boolean detailed) throws SQLException {
 		
 		Film film = new Film();
 		film.setId(rs.getInt("id"));
@@ -52,13 +52,18 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 		film.setReplacementCost(rs.getDouble("replacement_cost"));
 		film.setRating(rs.getString("rating"));
 		film.setLanguage(rs.getString("name"));
-		film.setCategory(rs.getString(17));
+		
 
 		String[] featuresArr = rs.getString("special_features").split(",");
 		Set<String> featuresSet = new HashSet<>(Arrays.asList(featuresArr));
 		film.setSpecialFeatures(featuresSet);
 
 		List<Actor> cast = findActorsByFilmId(film.getId());
+		
+		if(detailed) {
+			film.setCategory(rs.getString(17));
+		}
+		
 		film.setCast(cast);
 		return film;
 	}
@@ -81,7 +86,7 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 			ResultSet rs = stmt.executeQuery();
 			
 			if(rs.next())
-				film = extractFilm(rs);
+				film = extractFilm(rs, true);
 
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -169,7 +174,7 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 			List<Film> films = new ArrayList<>();
 
 			while(rs.next()) {
-				Film film = extractFilm(rs);
+				Film film = extractFilm(rs, false);
 				films.add(film);				
 			}
 			return films;
