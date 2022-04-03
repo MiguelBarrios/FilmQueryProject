@@ -12,9 +12,9 @@ public class Film {
 	private String rating;
 
 	private Integer releaseYear;
-	
+
 	private int languageId;
-	
+
 	private String language;
 
 	private String category;
@@ -32,26 +32,10 @@ public class Film {
 	private double rental_rate;
 
 	private double replacementCost;
-	
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Film other = (Film) obj;
-		return id == other.id;
-	}
-
-	public Film() {
-		
-	}
 
 	public Film(int id, String title, String description, int releaseYear, int languageId, int rentalDuration,
-			double rental_rate, int length, double replacementCost, String rating, Set<String> specialFeatures, String language) {
+			double rental_rate, int length, double replacementCost, String rating, Set<String> specialFeatures,
+			String language) {
 		super();
 		this.id = id;
 		this.title = title;
@@ -65,6 +49,26 @@ public class Film {
 		this.rating = rating;
 		this.specialFeatures = specialFeatures;
 		this.language = language;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Film other = (Film) obj;
+		return id == other.id;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(id);
+	}
+
+	public Film() {
 	}
 
 	public int getId() {
@@ -154,7 +158,7 @@ public class Film {
 	public void setSpecialFeatures(Set<String> specialFeatures) {
 		this.specialFeatures = specialFeatures;
 	}
-	
+
 	public List<Actor> getCast() {
 		return cast;
 	}
@@ -187,30 +191,20 @@ public class Film {
 		this.category = category;
 	}
 
-	@Override
-	public int hashCode() {
-		return Objects.hash(id);
-	}
-	
 	public void basicDisplay() {
-		System.out.printf("%s(%s) %s\n", title, rating,releaseYear);
-		System.out.printf("Language: %s\n", language);
+		System.out.printf("%s(%s) %s Language: %s\n", title, rating, releaseYear, language);
 		System.out.println("Description: " + description);
 		System.out.printf("Cast: %s\n\n", cast);
 	}
-	
+
 	public void detailedView() {
-		System.out.println("\nDetailed View");
-		String res = title  + "(" + rating + ")" + "id=" + id + " releaseYear=" + releaseYear
-				+ ", languageId=" + languageId + ", language=" + language + ", category=" + category 
-				+ "\ndescription=" + description 
-				+ "\ncast: " + cast
-				+ "\nlength=" + length + ", specialFeatures=" + specialFeatures
-				+ "\nRental Details"
-				+ "\nrentalDuration=" + rentalDuration + ", rental_rate=" + rental_rate + ", replacementCost="
-				+ replacementCost + "\n";
-		
-		
+		System.out.println("\n------ Detailed View -------");
+		String res = title + "(" + rating + ")" + "id=" + id + " releaseYear=" + releaseYear + ", languageId="
+				+ languageId + ", language=" + language + ", category=" + category + ", length=" + length
+				+ "\ndescription:" + description + "\ncast: " + cast + "\nspecialFeatures: " + specialFeatures
+				+ "\nRental Details: " + "rentalDuration=" + rentalDuration + ", rental_rate=" + rental_rate
+				+ ", replacementCost=" + replacementCost + "\n" + "----------------------------";
+
 		System.out.println(res);
 	}
 
@@ -222,8 +216,5 @@ public class Film {
 				+ ", rentalDuration=" + rentalDuration + ", rental_rate=" + rental_rate + ", replacementCost="
 				+ replacementCost + "]";
 	}
-
-
-	
 
 }

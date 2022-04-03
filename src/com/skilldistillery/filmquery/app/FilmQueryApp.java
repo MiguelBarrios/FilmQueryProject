@@ -62,24 +62,25 @@ public class FilmQueryApp {
 	}
 
 	private void displayMainMenu() {
-		System.out.println("Main Menu");
+		System.out.println("---------- Main Menu ----------");
 		System.out.println("1) Look up film by film id");
 		System.out.println("2) Search for films by keyword");
 		System.out.println("3) Exit");
 		System.out.print("Selection: ");
-
 	}
 
 	private void searchForFilmbyId(Scanner input) {
 
-		System.out.println("\n## Lookup Film by Id ##");
+		System.out.println("\n------ Lookup Film by Id ------");
 		System.out.print("Enter film id: ");
 
+		String userInput = "";
 		int id = 0;
 		try {
-			id = Integer.parseInt(input.nextLine());
+			userInput = input.nextLine();
+			id = Integer.parseInt(userInput);
 		} catch (NumberFormatException e) {
-			System.out.println("Invalid input");
+			System.out.println("No films with id: " + userInput + " found");
 			return;
 		}
 
@@ -91,28 +92,28 @@ public class FilmQueryApp {
 		}
 
 		film.basicDisplay();
+		System.out.println("--------- Film menu -----------");
 		System.out.println("1) View film details");
-		System.out.println("2) Return to main menu");
+		System.out.println("Or press any key to return to main menu");
 		System.out.print("Selection: ");
-		String userInput = input.nextLine();
-		if(userInput.equals("1")) {
+		userInput = input.nextLine();
+		if (userInput.equals("1")) {
 			film.detailedView();
 		}
 
 	}
 
 	private void searchForFilmByKeyword(Scanner input) {
-		System.out.println("\n Search for Film By Keyword");
+		System.out.println("\n---- Search for Film By Keyword ----");
 		System.out.print("Enter keyword: ");
 		String keyword = input.nextLine();
 		List<Film> films = db.findFilmsByKeyWord(keyword);
 		if (films == null) {
 			System.out.println("No films with keyword \"" + keyword + "\" found");
-			return;
-		}
-		System.out.println("Films containing: " + keyword);
-		for (Film film : films) {
-			film.basicDisplay();
+		} else {
+			System.out.println("------ Films containing: " + keyword + " ------");
+			for (Film film : films)
+				film.basicDisplay();
 		}
 
 	}

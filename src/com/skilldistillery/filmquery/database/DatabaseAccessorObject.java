@@ -58,12 +58,12 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 		film.setSpecialFeatures(featuresSet);
 
 		List<Actor> cast = findActorsByFilmId(film.getId());
+		film.setCast(cast);
 		
 		if(detailed) {
 			film.setCategory(rs.getString(17));
 		}
 		
-		film.setCast(cast);
 		return film;
 	}
 
@@ -115,34 +115,31 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 		}
 		
 		return actor;
-
 	}
-
+	
 	@Override
 	public List<Actor> findActorsByFilmId(int filmId) {
 
 		String query = "SELECT actor.id, actor.first_name, actor.last_name FROM film_actor\n"
 				+ "JOIN actor on film_actor.actor_id = actor.id\n" + "WHERE film_id = ?";
 
+		List<Actor> actors = new ArrayList<>();
 		try (Connection conn = DriverManager.getConnection(URL, user, pass)) {
 			PreparedStatement stmt = prepareStatement(conn, query, filmId);
 			ResultSet rs = stmt.executeQuery();
-
-			if (!rs.isBeforeFirst())
-				return new ArrayList<>();
-
-			List<Actor> actors = new ArrayList<>();
+			
 			while (rs.next()) {
 				Actor actor = extractActor(rs);
 				actors.add(actor);
 			}
-			return actors;
+
 		} catch (SQLException e) {
 			e.printStackTrace();
-			return null;
 		}
+		
+		return actors;
 	}
-	
+
 	public PreparedStatement prepareStatement(Connection conn, String query, String param) throws SQLException {
 		PreparedStatement stmt = conn.prepareStatement(query);
 		stmt.setString(1, "%" + param + "%");
@@ -157,25 +154,26 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 				+ "WHERE title like ? OR\n"
 				+ "description like ?";
 		
+		List<Film> films = null;
 		try(Connection conn = DriverManager.getConnection(URL, user, pass)){
 			PreparedStatement stmt = prepareStatement(conn, query,searchKeyWord);
 			ResultSet rs = stmt.executeQuery();
-						
-			// no results
-			if (!rs.isBeforeFirst())
-				return null;
-			
-			List<Film> films = new ArrayList<>();
-
-			while(rs.next()) {
-				Film film = extractFilm(rs, false);
-				films.add(film);				
+		
+			// Checks to see if anything was returned
+			if(rs.isBeforeFirst()) {
+				films = new ArrayList<>();
+				
+				while(rs.next()) {
+					Film film = extractFilm(rs, false);
+					films.add(film);				
+				}
 			}
-			return films;
 			
 		}catch(SQLException e) {
 			e.printStackTrace();
-			return null;
 		}
+		
+		return films;
 	}
+	
 }
