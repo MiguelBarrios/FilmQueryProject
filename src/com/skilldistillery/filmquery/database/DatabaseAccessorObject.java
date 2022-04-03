@@ -53,7 +53,6 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 		film.setRating(rs.getString("rating"));
 		film.setLanguage(rs.getString("name"));
 		
-
 		String[] featuresArr = rs.getString("special_features").split(",");
 		Set<String> featuresSet = new HashSet<>(Arrays.asList(featuresArr));
 		film.setSpecialFeatures(featuresSet);
@@ -70,9 +69,6 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 
 	@Override
 	public Film findFilmById(int filmId) {
-//		String query = "SELECT * FROM film\n"
-//				+ "JOIN language on film.language_id = language.id\n"
-//				+ "WHERE film.id = ?";
 		
 		String query = "SELECT * FROM film\n"
 				+ "JOIN language on film.language_id = language.id \n"
@@ -153,8 +149,6 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 		stmt.setString(2, "%" + param + "%");
 		return stmt;
 	}
-	
-
 	
 	@Override
 	public List<Film> findFilmsByKeyWord(String searchKeyWord){
