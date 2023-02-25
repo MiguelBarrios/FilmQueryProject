@@ -18,9 +18,9 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 
 	private static final String URL = "jdbc:mysql://localhost:3306/sdvid?useSSL=false&useLegacyDatetimeCode=false&serverTimezone=US/Mountain";
 
-	private String user = "student";
+	private String user = "root";
 
-	private String pass = "student";
+	private String pass = "root";
 
 	static {
 		try {
@@ -38,33 +38,34 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 		return stmt;
 	}
 	
+
 	public Film extractFilm(ResultSet rs, boolean detailed) throws SQLException {
 		
-		Film film = new Film();
-		film.setId(rs.getInt("id"));
-		film.setTitle(rs.getString("title"));
-		film.setDescription(rs.getString("description"));
-		film.setReleaseYear(rs.getInt("release_year"));
-		film.setLanguageId(rs.getInt("language_id"));
-		film.setRentalDuration(rs.getInt("rental_duration"));
-		film.setRental_rate(rs.getDouble("rental_rate"));
-		film.setLength(rs.getInt("length"));
-		film.setReplacementCost(rs.getDouble("replacement_cost"));
-		film.setRating(rs.getString("rating"));
-		film.setLanguage(rs.getString("name"));
-		
-		String[] featuresArr = rs.getString("special_features").split(",");
-		Set<String> featuresSet = new HashSet<>(Arrays.asList(featuresArr));
-		film.setSpecialFeatures(featuresSet);
-
-		List<Actor> cast = findActorsByFilmId(film.getId());
-		film.setCast(cast);
+		Film film =  Film.Builder.newInstance()
+				.setId(rs.getInt("id"))
+				.setTitle(rs.getString("title"))
+				.setDescription(rs.getString("description"))
+				.setReleaseYear(rs.getInt("release_year"))
+				.setLanguageId(rs.getInt("language_id"))
+				.setRentalDuration(rs.getInt("rental_duration"))
+				.setRentalRate(rs.getDouble("rental_rate"))
+				.setLength(rs.getInt("length"))
+				.setReplacementCost(rs.getDouble("replacement_cost"))
+				.setRating(rs.getString("rating"))
+				.setLanguage(rs.getString("name"))
+				.setSpecialFeatures(getFilmFeatures(rs))
+				.setCast(findActorsByFilmId(rs.getInt("id")))
+				.build();	
 		
 		if(detailed) {
 			film.setCategory(rs.getString(17));
 		}
-		
 		return film;
+	}
+	
+	public Set<String> getFilmFeatures(ResultSet rs) throws SQLException{
+		String[] featuresArr = rs.getString("special_features").split(",");
+		return new HashSet<>(Arrays.asList(featuresArr));
 	}
 
 	@Override
@@ -91,11 +92,12 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 	}
 
 	public Actor extractActor(ResultSet rs) throws SQLException {
-		Actor actor = new Actor();
-		actor.setId(rs.getInt("id"));
-		actor.setFirstName(rs.getString("first_name"));
-		actor.setLastName(rs.getString("last_name"));
-		return actor;
+		
+		return Actor.Builder.newInstance()
+				.setId(rs.getInt("id"))
+				.setFirstName(rs.getString("first_name"))
+				.setLastName(rs.getString("last_name"))
+				.build();
 	}
 
 	@Override
@@ -120,13 +122,14 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 	@Override
 	public List<Actor> findActorsByFilmId(int filmId) {
 
-		String query = "SELECT actor.id, actor.first_name, actor.last_name FROM film_actor\n"
-				+ "JOIN actor on film_actor.actor_id = actor.id\n" + "WHERE film_id = ?";
+		String query = "SELECT actor.* FROM film_actor\n"
+				+ "JOIN actor on film_actor.actor_id = actor.id\n" 
+				+ "WHERE film_id = ?";
 
 		List<Actor> actors = new ArrayList<>();
-		try (Connection conn = DriverManager.getConnection(URL, user, pass)) {
-			PreparedStatement stmt = prepareStatement(conn, query, filmId);
-			ResultSet rs = stmt.executeQuery();
+		try (Connection conn = DriverManager.getConnection(URL, user, pass);
+				PreparedStatement stmt = prepareStatement(conn, query, filmId);
+				ResultSet rs = stmt.executeQuery();) {
 			
 			while (rs.next()) {
 				Actor actor = extractActor(rs);
@@ -154,14 +157,14 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 				+ "WHERE title like ? OR\n"
 				+ "description like ?";
 		
-		List<Film> films = null;
-		try(Connection conn = DriverManager.getConnection(URL, user, pass)){
-			PreparedStatement stmt = prepareStatement(conn, query,searchKeyWord);
-			ResultSet rs = stmt.executeQuery();
+		List<Film> films = new ArrayList<>();
+		try(Connection conn = DriverManager.getConnection(URL, user, pass);
+				PreparedStatement stmt = prepareStatement(conn, query,searchKeyWord);
+				ResultSet rs = stmt.executeQuery();
+			){
+
 		
-			// Checks to see if anything was returned
-			if(rs.isBeforeFirst()) {
-				films = new ArrayList<>();
+			if(rs.isBeforeFirst()) {	
 				
 				while(rs.next()) {
 					Film film = extractFilm(rs, false);

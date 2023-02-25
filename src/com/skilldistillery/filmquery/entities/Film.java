@@ -217,4 +217,117 @@ public class Film {
 				+ replacementCost + "]";
 	}
 
+    public static class Builder {
+        private int id;
+        private String title;
+        private String description;
+        private int releaseYear;
+        private int languageId;
+        private int rentalDuration;
+        private double rentalRate;
+        private int length;
+        private double replacementCost;
+        private String rating;
+        private String language;
+        private Set<String> specialFeatures;
+        private List<Actor> cast;
+        private String category;
+
+        public Builder() {}
+        
+        public static Builder newInstance() {
+        	return new Builder();
+        }
+        
+        
+
+        public Builder setId(int id) {
+			this.id = id;
+			return this;
+		}
+
+		public Builder setTitle(String title) {
+			this.title = title;
+			return this;
+		}
+
+		public Builder setDescription(String description) {
+			this.description = description;
+			return this;
+		}
+
+		public Builder setReleaseYear(int releaseYear) {
+			this.releaseYear = releaseYear;
+			return this;
+		}
+
+		public Builder setLanguageId(int languageId) {
+			this.languageId = languageId;
+			return this;
+		}
+
+		public Builder setRentalDuration(int rentalDuration) {
+			this.rentalDuration = rentalDuration;
+			return this;
+		}
+
+		public Builder setRentalRate(double rentalRate) {
+			this.rentalRate = rentalRate;
+			return this;
+		}
+
+		public Builder setLength(int length) {
+			this.length = length;
+			return this;
+		}
+
+		public Builder setReplacementCost(double replacementCost) {
+			this.replacementCost = replacementCost;
+			return this;
+		}
+
+		public Builder setRating(String rating) {
+			this.rating = rating;
+			return this;
+		}
+
+		public Builder setLanguage(String language) {
+			this.language = language;
+			return this;
+		}
+
+		public Builder setSpecialFeatures(Set<String> specialFeatures) {
+            this.specialFeatures = specialFeatures;
+            return this;
+        }
+
+        public Builder setCast(List<Actor> cast) {
+            this.cast = cast;
+            return this;
+        }
+
+        public Builder setCategory(String category) {
+            this.category = category;
+            return this;
+        }
+
+        public Film build() {
+            Film film = new Film();
+            film.setId(id);
+            film.setTitle(title);
+            film.setDescription(description);
+            film.setReleaseYear(releaseYear);
+            film.setLanguageId(languageId);
+            film.setRentalDuration(rentalDuration);
+            film.setRental_rate(rentalRate);
+            film.setLength(length);
+            film.setReplacementCost(replacementCost);
+            film.setRating(rating);
+            film.setLanguage(language);
+            film.setSpecialFeatures(specialFeatures);
+            film.setCast(cast);
+            film.setCategory(category);
+            return film;
+        }
+    }
 }

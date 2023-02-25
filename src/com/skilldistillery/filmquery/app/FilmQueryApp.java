@@ -1,64 +1,54 @@
 package com.skilldistillery.filmquery.app;
 
+import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
 import com.skilldistillery.filmquery.database.DatabaseAccessor;
 import com.skilldistillery.filmquery.database.DatabaseAccessorObject;
-import com.skilldistillery.filmquery.entities.Actor;
 import com.skilldistillery.filmquery.entities.Film;
 
 public class FilmQueryApp {
 
-	DatabaseAccessor db = new DatabaseAccessorObject();
+	private DatabaseAccessor dao;
+	Scanner scanner;
+	
+	{
+		dao = new DatabaseAccessorObject();
+		scanner = new Scanner(System.in);
+	}
 
 	public static void main(String[] args) {
 		FilmQueryApp app = new FilmQueryApp();
-		app.test();
 		app.launch();
+		app.scanner.close();
 	}
 
-	private void test() {
-//		Film film = db.findFilmById(1);
-//		System.out.println(film);
-//		System.out.println();
-//
-//		Actor actor = db.findActorById(34);
-//		System.out.println(actor);
-//		System.out.println();
-//
-//		List<Actor> actors = db.findActorsByFilmId(3);
-//		System.out.println(actors);
-
-//		List<Film> films = db.findFilmsByKeyWord("gun");
-//		System.out.println(films);
-	}
 
 	private void launch() {
-		Scanner input = new Scanner(System.in);
-
-		startUserInterface(input);
-
-		input.close();
+		startUserInterface();
 	}
 
-	private void startUserInterface(Scanner input) {
-		String userInput = "";
+	private void startUserInterface() {
+		String input = "";
 		do {
 			displayMainMenu();
-			userInput = input.nextLine();
-			if (userInput.equals("1")) {
-				searchForFilmbyId(input);
-			} else if (userInput.equals("2")) {
-				searchForFilmByKeyword(input);
-			} else if (userInput.equals("3")) {
-				System.out.println("Goodbye");
-				return;
-			} else {
-				System.out.println("Invalid input");
+			input = scanner.nextLine();
+			switch (input) {
+				case "1":
+					searchForFilmbyId();
+					break;
+				case "2":
+					searchForFilmByKeyword();
+					break;
+				case "3":
+					System.out.println("Goodbye");
+					return;
+				default:
+					System.out.println("Invalid input");
 			}
 
-		} while (!userInput.equals("3"));
+		} while (!input.equals("3"));
 	}
 
 	private void displayMainMenu() {
@@ -69,51 +59,48 @@ public class FilmQueryApp {
 		System.out.print("Selection: ");
 	}
 
-	private void searchForFilmbyId(Scanner input) {
+	private void searchForFilmbyId() {
 
-		System.out.println("\n------ Lookup Film by Id ------");
-		System.out.print("Enter film id: ");
+		System.out.println("\n------ Search Film by Id ------\nEnter film id: ");
 
 		String userInput = "";
 		int id = 0;
 		try {
-			userInput = input.nextLine();
-			id = Integer.parseInt(userInput);
-		} catch (NumberFormatException e) {
+			id = scanner.nextInt();
+			Film film = dao.findFilmById(id);
+
+			if (film == null) {
+				System.out.println("Film with id: " + id + " not found\n");
+				return;
+			}
+
+			film.basicDisplay();
+			System.out.println("--------- Film menu -----------");
+			System.out.println("1) View film details");
+			System.out.println("Or press any key to return to main menu");
+			System.out.print("Selection: ");
+			userInput = scanner.nextLine();
+			if (userInput.equals("1")) {
+				film.detailedView();
+			}
+		} catch (InputMismatchException e) {
 			System.out.println("No films with id: " + userInput + " found");
-			return;
 		}
 
-		Film film = db.findFilmById(id);
 
-		if (film == null) {
-			System.out.println("Film with id: " + id + " not found\n");
-			return;
-		}
-
-		film.basicDisplay();
-		System.out.println("--------- Film menu -----------");
-		System.out.println("1) View film details");
-		System.out.println("Or press any key to return to main menu");
-		System.out.print("Selection: ");
-		userInput = input.nextLine();
-		if (userInput.equals("1")) {
-			film.detailedView();
-		}
 
 	}
 
-	private void searchForFilmByKeyword(Scanner input) {
+	private void searchForFilmByKeyword() {
 		System.out.println("\n---- Search for Film By Keyword ----");
 		System.out.print("Enter keyword: ");
-		String keyword = input.nextLine();
-		List<Film> films = db.findFilmsByKeyWord(keyword);
+		String keyword = scanner.nextLine();
+		List<Film> films = dao.findFilmsByKeyWord(keyword);
 		if (films == null) {
 			System.out.println("No films with keyword \"" + keyword + "\" found");
 		} else {
 			System.out.println("------ Films containing: " + keyword + " ------");
-			for (Film film : films)
-				film.basicDisplay();
+			films.forEach(film -> film.basicDisplay());
 		}
 
 	}

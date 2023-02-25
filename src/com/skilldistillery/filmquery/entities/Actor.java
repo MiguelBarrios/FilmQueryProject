@@ -47,5 +47,41 @@ public class Actor {
 		return String.format("%s %s id: %d", firstName, lastName, id);
 	}
 	
+	public static class Builder{
+		private int id;
+		private String firstName;
+		private String lastName;
+		public Builder() {}
+		
+		public static Builder newInstance() {
+			return new Builder();
+		}
+
+		public Builder setId(int id) {
+			this.id = id;
+			return this;
+		}
+
+		public Builder setFirstName(String firstName) {
+			this.firstName = firstName;
+			return this;
+		}
+
+		public Builder setLastName(String lastName) {
+			this.lastName = lastName;
+			return this;
+		}
+		
+		public Actor build() {
+			Actor actor = new Actor();
+			actor.setId(id);
+			actor.setFirstName(firstName);
+			actor.setLastName(lastName);
+			return actor;
+			
+		}
+		
+	}
+	
 	
 }
